@@ -1,8 +1,9 @@
 const mongoose = require('mongoose');
 const app = require('./componentsAPI/app');
+const key = require('./config/keys');
 
 mongoose.connect(
-    'mongodb://localhost:27017/DirectMan',
+    key.mongoURL,
     {
         useUnifiedTopology: true,  // установка опций
         useNewUrlParser: true

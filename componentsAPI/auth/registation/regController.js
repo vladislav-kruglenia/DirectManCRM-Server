@@ -1,12 +1,12 @@
 const bcrypt = require('bcryptjs');
-const UsersModel = require('../usersModel');
+const UserModel = require('../usersModel');
 
 module.exports.saveUser = async (req, res) => {
-    const candidate = await UsersModel.findOne({email: req.body.email});
+    const candidate = await UserModel.findOne({email: req.body.email});
     if(candidate){
         res.status(403).json({message:"User with such mail already exists"})
     } else {
-        const user = new UsersModel({
+        const user = new UserModel({
             email: req.body.email,
             password: bcrypt.hashSync(req.body.password, bcrypt.genSaltSync(10))
         });
