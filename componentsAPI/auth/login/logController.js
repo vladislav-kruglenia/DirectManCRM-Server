@@ -11,14 +11,13 @@ module.exports.logController = async (req, res) => {
         const passwordResult = bcrypt.compareSync(req.body.password, candidate.password);
         if (passwordResult) {
             // Генерация токена
-            console.log(candidate._id);
-            const token = jwt.sign({
-                email: req.body.email,
-                userId: candidate._id
-            }, key.jwt, {expiresIn: 3600});
+            const accessToken = createToken(req.body.email, candidate._id, key.jwt, 3600);
+            const refreshToken = createToken(req.body.email, candidate._id, key.jwt, 6200);
+            res.cookie('jwt', refreshToken);
             res.status(200).json({
-                token: `Bearer ${token}`,
-                message: "Token created"})
+                token: `Bearer ${accessToken}`,
+                message: "Token created"
+            });
         } else {
             // Неверный пароль
             res.status(401).json({message: "Passwords do not match."})
@@ -29,6 +28,11 @@ module.exports.logController = async (req, res) => {
     }
 };
 
-
+let createToken = (email, userId, keyJwt, expiresIn) => {
+    return jwt.sign({
+        email: email,
+        userId: userId
+    }, keyJwt, {expiresIn: expiresIn})
+};
 
 
