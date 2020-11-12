@@ -1,23 +1,11 @@
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
 const passport = require('passport');
 const indexAuth = require('./auth/indexAuth');
-// const cors = require('cors');
-// const passportMiddleware = require('./middlewares/passport');
 
-/*let corsOptions = {
-    origin: 'http://localhost:3000/',
-    optionsSuccessStatus: 200
-};*/
-//app.options('*', cors());
-/*app.use(cors({
-    origin: "http://localhost:5000",
-    credentials: true,
-    methods: "GET,POST,DELETE,PUT,OPTIONS",
-    allowedHeaders:
-        "Origin, X-Requested-With, Content-Type, Accept, authorization, x-xsrf-token"
-}));*/
+// const passportMiddleware = require('./middlewares/passport');
 
 app.use((req, res, next) => {
     res.header("Access-Control-Allow-Origin", "http://localhost:3000");
@@ -32,6 +20,7 @@ app.use((req, res, next) => {
     }
     next();
 });
+app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(passport.initialize());
 app.use(passport.session());
