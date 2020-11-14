@@ -10,25 +10,27 @@ module.exports.refreshTokenController = async (req, res) => {
 
     // Поиск пользователя с таким токеном
     let user = await UserModel.findOne({refreshToken});
-        if (user){
-            try{
-                // Проверка типа токена
-                let payload = jwt.verify(refreshToken, key.jwt);
-                payload.type !== "refresh" && res.status(400).json({message: "Invalid token."});
+    if (user) {
+        try {
+            // Проверка типа токена
+            let payload = jwt.verify(refreshToken, key.jwt);
+            payload.type !== "refresh" && errorStatus(res, "Invalid token.");
 
-                // Создание и отправка новых токенов клиенту
-                tokensGeneration(res, user);
-            } catch(e){
-                if(e instanceof jwt.TokenExpiredError) {
-                    res.status(400).json({message: "Token expired."})
-                } else if(e instanceof jwt.JsonWebTokenError){
-                    res.status(400).json({message: "Invalid token."})
-                }
+            // Создание и отправка новых токенов клиенту
+            tokensGeneration(res, user);
 
-            }
-        } else {
-            res.status(400).json({message: "User is not auth."})
+        } catch (e) {
+            if (e instanceof jwt.TokenExpiredError) errorStatus(res, "Token expired.");
+            else if (e instanceof jwt.JsonWebTokenError) errorStatus(res, "Invalid token.")
         }
+    } else errorStatus(res, "User is not auth.")
+};
+
+let errorStatus = (res, message) => {
+    return res.status(400).json({
+        message: message,
+        isAuth: false
+    })
 };
 
 

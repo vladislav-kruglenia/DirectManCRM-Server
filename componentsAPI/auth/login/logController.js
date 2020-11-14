@@ -9,36 +9,22 @@ module.exports.logController = async (req, res) => {
         //Сравнение паролей
         const passwordResult = bcrypt.compareSync(req.body.password, user.password);
         if (passwordResult) {
+            // Создание и отправка новых токенов клиенту
             tokensGeneration(res, user);
         } else {
             // Неверный пароль
-            res.status(401).json({message: "Passwords do not match."})
+            errorStatus(res, 401, "Passwords do not match.");
         }
     } else {
         // Нет в базе пользователя с такой почтой
-        res.status(404).json({message: "This user is not registered"})
+        errorStatus(res, 404, "This user is not registered");
     }
 };
 
-/*module.exports.tokensGeneration = (req, res, candidate) =>{
-    // Генерация токена
-    const accessToken = createToken(req.body.email, candidate._id, key.jwt, "6h", 'access');
-    const refreshToken = createToken(req.body.email, candidate._id, key.jwt, "24h", 'refresh');
-    candidate.refreshToken = refreshToken;
-    candidate.save(err => err && console.log(err));
-    res.cookie('refreshToken', refreshToken);
-    return res.status(200).json({
-        token: `Bearer ${accessToken}`,
-        message: "Token created"
-    });
+let errorStatus = (res, statusCode, message) => {
+    return res.status(statusCode).json({
+        message: message,
+        isAuth: false
+    })
 };
-
-let createToken = (email, userId, keyJwt, expiresIn, tokenType) => {
-    return jwt.sign({
-        email: email,
-        userId: userId,
-        type: tokenType,
-    }, keyJwt, {expiresIn: expiresIn})
-};*/
-
 

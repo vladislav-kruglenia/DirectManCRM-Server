@@ -15,8 +15,10 @@ module.exports = {
         res.setHeader('Set-Cookie', `refreshToken=${refreshToken}; HttpOnly`);
 
         return res.status(200).json({
+            message: "Token created",
+            isAuth: true,
+            userId: user.userId,
             token: `Bearer ${accessToken}`,
-            message: "Token created"
         });
     },
 };
