@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const passport = require('passport');
 const indexAuth = require('./auth/indexAuth');
+const indexProcessOrder = require('./processOrder/indexProcessOrder');
 
 // const passportMiddleware = require('./middlewares/passport');
 
@@ -27,6 +28,7 @@ app.use(passport.session());
 
 require('./middlewares/passport')(passport);
 indexAuth(app);
+indexProcessOrder(app);
 
 
 module.exports = app;
