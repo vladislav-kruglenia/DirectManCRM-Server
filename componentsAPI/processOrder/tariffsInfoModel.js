@@ -1,29 +1,27 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const orderSchema = new Schema({
-    userId: String,
-    nameProject: {type: String, default: ""},
+const tariffsInfoSchema = new Schema({
+    ID: {type: String, required: true},
     directionsAndTariffs: [
         {
             nameDirection: {type: String, default: ""},
             idDirection: {type: Number, default: -1},
             paymentInFull: {type: Boolean, default: true},
-            directionTotalPrice: {type: Number, default: -1},
-            namesTariffs: [
+            selected: {type: Boolean, default: false},
+            tariffsNames: [
                 {
-                    tariffId: {type: Number, default: -1},
-                    tariffName: {type: String, default: ""},
-                    tariffStatus: {type: Boolean, default: false},
+                    id: {type: Number, default: -1},
+                    name: {type: String, default: ""},
+                    selected: {type: Boolean, default: false},
                     packetPrice: {type: Number, default: -1},
-                    paymentPackage: {type: Boolean, default: true},
-                    deadline: {type: Number, default: -1},
-                    totalPrice: {type: Number, default: -1},
+                    paymentAPackageServices: {type: Boolean, default: true},
+                    periodOfExecution: {type: Number, default: -1},
                     services: [
                         {
                             serviceName: {type: String, default: ""},
-                            serviceStatus: {type: Boolean, default: false},
-                            serviceId: {type: Number, default: -1},
+                            selected: {type: Boolean, default: false},
+                            idService: {type: Number, default: -1},
                             servicePrice: {type: Number, default: -1}
                         }
                     ]
@@ -33,7 +31,7 @@ const orderSchema = new Schema({
     ]
 });
 
-module.exports = mongoose.model('orders_info', orderSchema);
+module.exports = mongoose.model('tariffs_info', tariffsInfoSchema);
 
 
 /*
